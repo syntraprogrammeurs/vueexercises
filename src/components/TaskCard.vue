@@ -6,17 +6,20 @@ const props = defineProps({
   description: { type: String, default: "" },
   assignee: { type: String, required: true },
   role: { type: String, required: true },
-  priority: { type: String, default: "" }
+  priority: { type: String, default: "" },
+  done: { type: Boolean, default: false }
 })
 </script>
 
 <template>
-  <article class="rounded-lg bg-gray-800 p-4 shadow-md border border-gray-700">
-
+  <article
+      class="rounded-lg p-4 shadow-md border border-gray-700"
+      :class="props.done ? 'bg-gray-900' : 'bg-gray-800'"
+  >
     <div class="flex items-start justify-between">
       <h3
-          class="font-semibold text-white"
-          :class="props.description ? 'text-sm' : 'text-base'"
+          class="font-semibold"
+          :class="props.done ? 'text-gray-500 line-through' : 'text-white'"
       >
         {{ props.title }}
       </h3>
@@ -41,6 +44,5 @@ const props = defineProps({
     </p>
 
     <CardFooter :role="props.role" :assignee="props.assignee" />
-
   </article>
 </template>
