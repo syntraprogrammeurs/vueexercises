@@ -1,13 +1,32 @@
 <script setup>
 import CardFooter from "./CardFooter.vue"
+import TaskTitle from "./TaskTitle.vue"
 
 const props = defineProps({
-  title: { type: String, required: true },
-  description: { type: String, default: "" },
-  assignee: { type: String, required: true },
-  role: { type: String, required: true },
-  priority: { type: String, default: "" },
-  done: { type: Boolean, default: false }
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    default: ""
+  },
+  assignee: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    required: true
+  },
+  priority: {
+    type: String,
+    default: ""
+  },
+  done: {
+    type: Boolean,
+    default: false
+  }
 })
 </script>
 
@@ -17,12 +36,10 @@ const props = defineProps({
       :class="props.done ? 'bg-gray-900' : 'bg-gray-800'"
   >
     <div class="flex items-start justify-between">
-      <h3
-          class="font-semibold"
-          :class="props.done ? 'text-gray-500 line-through' : 'text-white'"
-      >
-        {{ props.title }}
-      </h3>
+      <TaskTitle
+          :title="props.title"
+          :has-description="!!props.description"
+      />
 
       <span
           v-if="props.priority"
@@ -39,9 +56,14 @@ const props = defineProps({
       </span>
     </div>
 
-    <p v-if="props.description" class="text-xs text-gray-300 mt-1 leading-relaxed">
+    <p
+        v-if="props.description"
+        class="text-xs text-gray-300 mt-1 leading-relaxed"
+    >
       {{ props.description }}
     </p>
+
+    <slot />
 
     <CardFooter :role="props.role" :assignee="props.assignee" />
   </article>

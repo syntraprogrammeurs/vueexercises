@@ -7,6 +7,10 @@ const props = defineProps({
   count: {
     type: Number,
     default: 0
+  },
+  color: {
+    type: String,
+    default: "gray"
   }
 })
 </script>
@@ -18,7 +22,18 @@ const props = defineProps({
         {{ props.title }}
       </h2>
 
-      <span class="inline-flex items-center justify-center rounded-full bg-gray-700 px-2 py-0.5 text-xs text-gray-100">
+      <span
+          class="inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs text-gray-100"
+          :class="
+          props.color === 'blue'
+            ? 'bg-blue-600'
+            : props.color === 'green'
+              ? 'bg-green-600'
+              : props.color === 'purple'
+                ? 'bg-purple-600'
+                : 'bg-gray-700'
+        "
+      >
         {{ props.count }}
       </span>
     </header>

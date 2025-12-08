@@ -15,7 +15,8 @@ import BoardColumn from "./components/BoardColumn.vue"
     </header>
 
     <section class="flex gap-6 overflow-x-auto pb-4">
-      <BoardColumn title="To Do" :count="2">
+      <!-- Kolom 1: originele volgorde -->
+      <BoardColumn title="Taken (origineel)" :count="3" color="blue">
         <TaskCard
             title="Nieuwe cursusstructuur uitwerken"
             description="Modules herzien en oefeningen toevoegen."
@@ -30,37 +31,40 @@ import BoardColumn from "./components/BoardColumn.vue"
             role="UI designer"
             priority="middel"
         />
-      </BoardColumn>
-
-      <BoardColumn title="Doing" :count="1">
-        <TaskCard
-            title="API koppeling testen"
-            description="Controleer foutafhandeling en timeouts."
-            assignee="Liam De Smet"
-            role="Backend developer"
-            priority="hoog"
-        />
-      </BoardColumn>
-
-      <BoardColumn title="Done" :count="3">
-        <TaskCard
-            title="Vite project opgezet"
-            description="Basisconfiguratie met Vue en Tailwind."
-            assignee="Emma Vermeersch"
-            role="Frontend developer"
-            priority="laag"
-        />
         <TaskCard
             title="Component structuur bepaald"
             assignee="Noah Martens"
             role="Software architect"
             priority="middel"
+            :done="true"
         />
+      </BoardColumn>
+
+      <!-- Kolom 2: gesorteerd op functie -->
+      <BoardColumn title="Taken (op functie)" :count="3" color="green">
+        <!-- eerst developer -->
         <TaskCard
-            title="Tailwind integratie getest"
-            assignee="Mila Peeters"
-            role="Frontend developer"
-            priority="laag"
+            title="Nieuwe cursusstructuur uitwerken"
+            description="Modules herzien en oefeningen toevoegen."
+            assignee="Tom Vanhoutte"
+            role="Full stack developer"
+            priority="hoog"
+        />
+        <!-- dan architect -->
+        <TaskCard
+            title="Component structuur bepaald"
+            assignee="Noah Martens"
+            role="Software architect"
+            priority="middel"
+            :done="true"
+        />
+        <!-- dan designer -->
+        <TaskCard
+            title="Design voor dashboard maken"
+            description="Wireframes en kleurenpalet bepalen."
+            assignee="Sarah Janssens"
+            role="UI designer"
+            priority="middel"
         />
       </BoardColumn>
     </section>
