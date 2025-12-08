@@ -1,5 +1,5 @@
 <script setup>
-import UserBadge from "./UserBadge.vue"
+import CardFooter from "./CardFooter.vue"
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -12,6 +12,7 @@ const props = defineProps({
 
 <template>
   <article class="rounded-lg bg-gray-800 p-4 shadow-md border border-gray-700">
+
     <div class="flex items-start justify-between">
       <h3
           class="font-semibold text-white"
@@ -39,9 +40,7 @@ const props = defineProps({
       {{ props.description }}
     </p>
 
-    <div class="flex justify-between items-center mt-4">
-      <UserBadge :label="props.role" type="role" />
-      <UserBadge :label="props.assignee" type="assignee" />
-    </div>
+    <CardFooter :role="props.role" :assignee="props.assignee" />
+
   </article>
 </template>
