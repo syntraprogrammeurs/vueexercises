@@ -21,12 +21,14 @@ import BoardColumn from "./components/BoardColumn.vue"
             description="Modules herzien en oefeningen toevoegen."
             assignee="Tom Vanhoutte"
             role="Full stack developer"
+            priority="hoog"
         />
         <TaskCard
             title="Design voor dashboard maken"
             description="Wireframes en kleurenpalet bepalen."
             assignee="Sarah Janssens"
             role="UI designer"
+            priority="middel"
         />
       </BoardColumn>
 
@@ -36,6 +38,7 @@ import BoardColumn from "./components/BoardColumn.vue"
             description="Controleer foutafhandeling en timeouts."
             assignee="Liam De Smet"
             role="Backend developer"
+            priority="hoog"
         />
       </BoardColumn>
 
@@ -45,18 +48,19 @@ import BoardColumn from "./components/BoardColumn.vue"
             description="Basisconfiguratie met Vue en Tailwind."
             assignee="Emma Vermeersch"
             role="Frontend developer"
+            priority="laag"
         />
         <TaskCard
             title="Component structuur bepaald"
-            description=""
             assignee="Noah Martens"
             role="Software architect"
+            priority="middel"
         />
         <TaskCard
             title="Tailwind integratie getest"
-            description=""
             assignee="Mila Peeters"
             role="Frontend developer"
+            priority="laag"
         />
       </BoardColumn>
     </section>
