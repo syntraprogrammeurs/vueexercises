@@ -100,7 +100,7 @@ function handleAddTask() {
       </p>
     </header>
 
-    <!-- Nieuw formulier -->
+    <!-- Formulier uit oefening 6 blijft -->
     <section class="mb-6 bg-slate-900 border border-slate-800 rounded-xl p-4">
       <h2 class="text-sm font-semibold mb-3">
         Nieuwe taak toevoegen
@@ -115,7 +115,6 @@ function handleAddTask() {
               v-model="newTaskTitle"
               type="text"
               class="w-full rounded-md bg-slate-800 border border-slate-700 px-3 py-1.5 text-sm"
-              placeholder="Bijvoorbeeld: API koppeling testen"
           />
         </div>
 
@@ -127,7 +126,6 @@ function handleAddTask() {
               v-model="newTaskDescription"
               rows="3"
               class="w-full rounded-md bg-slate-800 border border-slate-700 px-3 py-1.5 text-sm"
-              placeholder="Korte toelichting bij de taak"
           ></textarea>
         </div>
 
@@ -154,7 +152,7 @@ function handleAddTask() {
             class="mt-2 inline-flex items-center rounded-md bg-blue-600 px-4 py-1.5 text-xs font-semibold hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed"
             :disabled="newTaskTitle.trim().length === 0"
         >
-          Taak toevoegen
+          Taak toevoegen (centraal formulier)
         </button>
       </form>
     </section>
@@ -163,6 +161,7 @@ function handleAddTask() {
       <BoardColumn
           v-for="column in columns"
           :key="column.id"
+          :id="column.id"
           :title="column.title"
           :count="column.tasks.length"
           :color="column.color"
