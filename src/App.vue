@@ -67,14 +67,14 @@ const newTaskTitle = ref("")
 const newTaskDescription = ref("")
 const newTaskColumnId = ref("original")
 
-let manualId = 100
+const nextTaskId = ref(100)
 
 function handleAddTask() {
   const column = columns.value.find(c => c.id === newTaskColumnId.value)
   if (!column) return
 
   column.tasks.push({
-    id: manualId++,
+    id: nextTaskId.value++,
     title: newTaskTitle.value,
     description: newTaskDescription.value,
     assignee: "Onbekend",
@@ -85,6 +85,21 @@ function handleAddTask() {
 
   newTaskTitle.value = ""
   newTaskDescription.value = ""
+}
+
+function handleAddTaskToColumn(payload) {
+  const column = columns.value.find(c => c.id === payload.columnId)
+  if (!column) return
+
+  column.tasks.push({
+    id: nextTaskId.value++,
+    title: payload.title,
+    description: "",
+    assignee: "Onbekend",
+    role: "Onbekend",
+    priority: "",
+    done: false
+  })
 }
 </script>
 
@@ -100,7 +115,7 @@ function handleAddTask() {
       </p>
     </header>
 
-    <!-- Formulier uit oefening 6 blijft -->
+    <!-- Centraal formulier (optie voor studenten) -->
     <section class="mb-6 bg-slate-900 border border-slate-800 rounded-xl p-4">
       <h2 class="text-sm font-semibold mb-3">
         Nieuwe taak toevoegen
@@ -152,7 +167,7 @@ function handleAddTask() {
             class="mt-2 inline-flex items-center rounded-md bg-blue-600 px-4 py-1.5 text-xs font-semibold hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed"
             :disabled="newTaskTitle.trim().length === 0"
         >
-          Taak toevoegen (centraal formulier)
+          Taak toevoegen (centraal)
         </button>
       </form>
     </section>
@@ -165,6 +180,7 @@ function handleAddTask() {
           :title="column.title"
           :count="column.tasks.length"
           :color="column.color"
+          @add-task="handleAddTaskToColumn"
       >
         <TaskCard
             v-for="task in column.tasks"
