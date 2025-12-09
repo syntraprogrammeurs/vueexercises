@@ -2,6 +2,7 @@
 import { ref } from "vue"
 import TaskCard from "./components/TaskCard.vue"
 import BoardColumn from "./components/BoardColumn.vue"
+import BoardSummary from "./components/BoardSummary.vue"
 
 const columns = ref([
   {
@@ -115,7 +116,10 @@ function handleAddTaskToColumn(payload) {
       </p>
     </header>
 
-    <!-- Centraal formulier (optie voor studenten) -->
+    <!-- Nieuw overzichtscomponent -->
+    <BoardSummary :columns="columns" />
+
+    <!-- Centraal formulier (uit oefening 6/8) -->
     <section class="mb-6 bg-slate-900 border border-slate-800 rounded-xl p-4">
       <h2 class="text-sm font-semibold mb-3">
         Nieuwe taak toevoegen
