@@ -89,59 +89,16 @@ const columns = [
 
     <!-- Template blijft nog statisch -->
     <section class="grid gap-6 md:grid-cols-2">
-      <BoardColumn title="Taken (origineel)" :count="3" color="blue">
-        <TaskCard
-            title="Nieuwe cursusstructuur uitwerken"
-            description="Modules herzien en oefeningen toevoegen."
-            assignee="Tom Vanhoutte"
-            role="Full stack developer"
-            priority="hoog"
-            :done="false"
-        />
-        <TaskCard
-            title="Design voor dashboard maken"
-            description="Wireframes en kleurenpalet bepalen."
-            assignee="Sarah Janssens"
-            role="UI designer"
-            priority="middel"
-            :done="false"
-        />
-        <TaskCard
-            title="Component structuur bepalen"
-            description="Structuur van de componentenboom uitwerken."
-            assignee="Noah Martens"
-            role="Software architect"
-            priority="middel"
-            :done="false"
-        />
+      <BoardColumn
+          v-for="column in columns"
+          :key="column.id"
+          :title="column.title"
+          :count="column.tasks.length"
+          :color="column.color"
+      >
+        <!-- hier komen straks de TaskCards -->
       </BoardColumn>
 
-      <BoardColumn title="Taken (op functie)" :count="3" color="green">
-        <TaskCard
-            title="Nieuwe cursusstructuur uitwerken"
-            description="Modules herzien en oefeningen toevoegen."
-            assignee="Tom Vanhoutte"
-            role="Full stack developer"
-            priority="hoog"
-            :done="false"
-        />
-        <TaskCard
-            title="Component structuur bepalen"
-            description="Structuur van de componentenboom uitwerken."
-            assignee="Noah Martens"
-            role="Software architect"
-            priority="middel"
-            :done="false"
-        />
-        <TaskCard
-            title="Design voor dashboard maken"
-            description="Wireframes en kleurenpalet bepalen."
-            assignee="Sarah Janssens"
-            role="UI designer"
-            priority="middel"
-            :done="false"
-        />
-      </BoardColumn>
     </section>
   </main>
 </template>
