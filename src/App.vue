@@ -94,9 +94,16 @@ const columns = [
           :count="column.tasks.length"
           :color="column.color"
       >
-        <p class="text-xs text-slate-400">
-          Hier komen straks de kaarten van deze kolom.
-        </p>
+        <TaskCard
+            v-for="task in column.tasks"
+            :key="task.id"
+            :title="task.title"
+            :description="task.description"
+            :assignee="task.assignee"
+            :role="task.role"
+            :priority="task.priority"
+            :done="task.done"
+        />
       </BoardColumn>
     </section>
   </main>
