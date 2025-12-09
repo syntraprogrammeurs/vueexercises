@@ -25,16 +25,8 @@ const columns = [
         role: "UI designer",
         priority: "middel",
         done: false
-      },
-      {
-        id: 3,
-        title: "Component structuur bepalen",
-        description: "Structuur van de componentenboom uitwerken.",
-        assignee: "Noah Martens",
-        role: "Software architect",
-        priority: "middel",
-        done: false
       }
+      // Let op: taak 3 is hier weggehaald en verplaatst naar backlog
     ]
   },
   {
@@ -70,6 +62,40 @@ const columns = [
         done: false
       }
     ]
+  },
+  {
+    id: "backlog",
+    title: "Backlog",
+    color: "purple",
+    tasks: [
+      {
+        id: 3,
+        title: "Component structuur bepalen",
+        description: "Structuur van de componentenboom uitwerken.",
+        assignee: "Noah Martens",
+        role: "Software architect",
+        priority: "middel",
+        done: false
+      },
+      {
+        id: 7,
+        title: "Nieuwe animaties uitwerken",
+        description: "Ideeën verzamelen voor micro-interacties.",
+        assignee: "Emma Vermeersch",
+        role: "Frontend developer",
+        priority: "laag",
+        done: false
+      },
+      {
+        id: 8,
+        title: "User stories uitschrijven",
+        description: "Backlog aanvullen met concrete user stories.",
+        assignee: "Liam De Smet",
+        role: "Product owner",
+        priority: "middel",
+        done: false
+      }
+    ]
   }
 ]
 </script>
@@ -86,7 +112,7 @@ const columns = [
       </p>
     </header>
 
-    <section class="grid gap-6 md:grid-cols-2">
+    <section class="grid gap-6 md:grid-cols-3">
       <BoardColumn
           v-for="column in columns"
           :key="column.id"
