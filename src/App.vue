@@ -1,8 +1,9 @@
 <script setup>
+import { ref } from "vue"
 import TaskCard from "./components/TaskCard.vue"
 import BoardColumn from "./components/BoardColumn.vue"
 
-const columns = [
+const columns = ref([
   {
     id: "original",
     title: "Taken (origineel)",
@@ -26,7 +27,6 @@ const columns = [
         priority: "middel",
         done: false
       }
-      // Let op: taak 3 is hier weggehaald en verplaatst naar backlog
     ]
   },
   {
@@ -97,7 +97,7 @@ const columns = [
       }
     ]
   }
-]
+])
 </script>
 
 <template>
