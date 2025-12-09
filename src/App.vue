@@ -2,7 +2,6 @@
 import TaskCard from "./components/TaskCard.vue"
 import BoardColumn from "./components/BoardColumn.vue"
 
-// Nieuwe datastructuur voor kolommen en taken
 const columns = [
   {
     id: "original",
@@ -87,7 +86,6 @@ const columns = [
       </p>
     </header>
 
-    <!-- Template blijft nog statisch -->
     <section class="grid gap-6 md:grid-cols-2">
       <BoardColumn
           v-for="column in columns"
@@ -96,9 +94,10 @@ const columns = [
           :count="column.tasks.length"
           :color="column.color"
       >
-        <!-- hier komen straks de TaskCards -->
+        <p class="text-xs text-slate-400">
+          Hier komen straks de kaarten van deze kolom.
+        </p>
       </BoardColumn>
-
     </section>
   </main>
 </template>
