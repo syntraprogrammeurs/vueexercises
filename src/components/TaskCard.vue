@@ -38,10 +38,17 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["toggle-important"])
+const emit = defineEmits(["toggle-important", "duplicate-task"])
 
 function handleToggleImportant() {
   emit("toggle-important", {
+    taskId: props.id,
+    fromColumnId: props.columnId
+  })
+}
+
+function handleDuplicateTask() {
+  emit("duplicate-task", {
     taskId: props.id,
     fromColumnId: props.columnId
   })
@@ -105,5 +112,16 @@ function handleToggleImportant() {
         {{ assignee }}
       </span>
     </footer>
+
+    <!-- NIEUW: knoppenbalk onderaan -->
+    <div class="mt-2 flex justify-end">
+      <button
+          type="button"
+          class="text-[11px] px-3 py-1 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-100"
+          @click="handleDuplicateTask"
+      >
+        Dupliceren
+      </button>
+    </div>
   </article>
 </template>

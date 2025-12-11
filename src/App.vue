@@ -19,7 +19,7 @@ const columns = ref([
         role: "Full stack developer",
         priority: "hoog",
         done: false,
-        important: true    // minstens één taak belangrijk
+        important: true
       }
     ]
   },
@@ -171,7 +171,7 @@ function getVisibleColumns() {
   return result
 }
 
-// NIEUW: belangrijk toggelen
+// belangrijk toggelen
 function handleToggleImportant(payload) {
   const column = columns.value.find(c => c.id === payload.fromColumnId)
   if (!column) return
@@ -186,6 +186,33 @@ function handleToggleImportant(payload) {
           task.important ? "belangrijk" : "niet belangrijk"
       }.`
   )
+}
+
+// NIEUW: taak dupliceren in dezelfde kolom
+function handleDuplicateTask(payload) {
+  const column = columns.value.find(c => c.id === payload.fromColumnId)
+  if (!column) return
+
+  const index = column.tasks.findIndex(t => t.id === payload.taskId)
+  if (index === -1) return
+
+  const original = column.tasks[index]
+
+  const copy = {
+    id: nextTaskId.value++,
+    title: original.title + " (kopie)",
+    description: original.description,
+    assignee: original.assignee,
+    role: original.role,
+    priority: original.priority,
+    done: original.done,
+    important: original.important
+  }
+
+  // kopie direct onder de originele taak plaatsen
+  column.tasks.splice(index + 1, 0, copy)
+
+  log(`Taak '${original.title}' gedupliceerd in kolom '${column.title}'.`)
 }
 </script>
 
@@ -310,6 +337,7 @@ function handleToggleImportant(payload) {
             :done="task.done"
             :important="task.important"
             @toggle-important="handleToggleImportant"
+            @duplicate-task="handleDuplicateTask"
         />
       </BoardColumn>
     </section>
