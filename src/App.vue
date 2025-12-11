@@ -18,7 +18,8 @@ const columns = ref([
         assignee: "Tom Vanhoutte",
         role: "Full stack developer",
         priority: "hoog",
-        done: false
+        done: false,
+        important: true    // minstens één taak belangrijk
       }
     ]
   },
@@ -34,7 +35,8 @@ const columns = ref([
         assignee: "Tom Vanhoutte",
         role: "Full stack developer",
         priority: "hoog",
-        done: false
+        done: false,
+        important: false
       },
       {
         id: 5,
@@ -43,7 +45,8 @@ const columns = ref([
         assignee: "Noah Martens",
         role: "Software architect",
         priority: "middel",
-        done: false
+        done: false,
+        important: false
       }
     ]
   },
@@ -59,7 +62,8 @@ const columns = ref([
         assignee: "Emma Vermeersch",
         role: "Frontend developer",
         priority: "laag",
-        done: false
+        done: false,
+        important: false
       }
     ]
   },
@@ -75,7 +79,8 @@ const columns = ref([
         assignee: "Team Dev",
         role: "Developer",
         priority: "laag",
-        done: true
+        done: true,
+        important: false
       }
     ]
   }
@@ -111,7 +116,8 @@ function handleAddTask() {
     assignee: "Onbekend",
     role: "Onbekend",
     priority: "",
-    done: false
+    done: false,
+    important: false
   })
 
   log(`Taak '${title}' toegevoegd aan kolom '${column.title}'.`)
@@ -133,7 +139,8 @@ function handleAddTaskToColumn(payload) {
     assignee: "Onbekend",
     role: "Onbekend",
     priority: "",
-    done: false
+    done: false,
+    important: false
   })
 
   log(`Taak '${title}' toegevoegd aan kolom '${column.title}' (via kolomformulier).`)
@@ -150,7 +157,7 @@ function clearDone() {
   log(`Alle ${count} taken in 'Done' verwijderd.`)
 }
 
-// helper om enkel zichtbare kolommen te tonen
+// HELPER: enkel zichtbare kolommen tonen
 function getVisibleColumns() {
   const result = []
 
@@ -162,6 +169,23 @@ function getVisibleColumns() {
   }
 
   return result
+}
+
+// NIEUW: belangrijk toggelen
+function handleToggleImportant(payload) {
+  const column = columns.value.find(c => c.id === payload.fromColumnId)
+  if (!column) return
+
+  const task = column.tasks.find(t => t.id === payload.taskId)
+  if (!task) return
+
+  task.important = !task.important
+
+  log(
+      `Taak '${task.title}' is nu ${
+          task.important ? "belangrijk" : "niet belangrijk"
+      }.`
+  )
 }
 </script>
 
@@ -276,12 +300,16 @@ function getVisibleColumns() {
         <TaskCard
             v-for="task in column.tasks"
             :key="task.id"
+            :id="task.id"
+            :column-id="column.id"
             :title="task.title"
             :description="task.description"
             :assignee="task.assignee"
             :role="task.role"
             :priority="task.priority"
             :done="task.done"
+            :important="task.important"
+            @toggle-important="handleToggleImportant"
         />
       </BoardColumn>
     </section>

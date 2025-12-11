@@ -1,8 +1,13 @@
 <script setup>
-import CardFooter from "./CardFooter.vue"
-import TaskTitle from "./TaskTitle.vue"
-
 const props = defineProps({
+  id: {
+    type: Number,
+    required: true
+  },
+  columnId: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     required: true
@@ -13,11 +18,11 @@ const props = defineProps({
   },
   assignee: {
     type: String,
-    required: true
+    default: ""
   },
   role: {
     type: String,
-    required: true
+    default: ""
   },
   priority: {
     type: String,
@@ -26,45 +31,79 @@ const props = defineProps({
   done: {
     type: Boolean,
     default: false
+  },
+  important: {
+    type: Boolean,
+    default: false
   }
 })
+
+const emit = defineEmits(["toggle-important"])
+
+function handleToggleImportant() {
+  emit("toggle-important", {
+    taskId: props.id,
+    fromColumnId: props.columnId
+  })
+}
 </script>
 
 <template>
   <article
-      class="rounded-lg p-4 shadow-md border border-gray-700"
-      :class="props.done ? 'bg-gray-900' : 'bg-gray-800'"
+      class="rounded-xl bg-slate-900 border border-slate-800 p-4 flex flex-col gap-3"
   >
-    <div class="flex items-start justify-between">
-      <TaskTitle
-          :title="props.title"
-          :has-description="!!props.description"
-      />
+    <header class="flex items-center justify-between gap-2">
+      <button
+          type="button"
+          class="text-[11px] px-2 py-1 rounded-full border border-slate-600 bg-slate-950 hover:bg-slate-800"
+          :class="important ? 'text-yellow-300' : 'text-slate-300'"
+          @click="handleToggleImportant"
+      >
+        {{ important ? "★ Belangrijk" : "☆ Markeer belangrijk" }}
+      </button>
 
       <span
-          v-if="props.priority"
-          class="ml-2 rounded-full px-2 py-0.5 text-[10px] font-medium border"
-          :class="
-          props.priority === 'hoog'
-            ? 'bg-red-500/20 border-red-400/70 text-red-100'
-            : props.priority === 'middel'
-              ? 'bg-yellow-500/20 border-yellow-400/70 text-yellow-100'
-              : 'bg-gray-600/70 border-gray-500/70 text-gray-100'
-        "
+          v-if="priority"
+          class="text-[11px] px-2 py-0.5 rounded-full"
+          :class="priority === 'hoog'
+          ? 'bg-red-900 text-red-100'
+          : priority === 'middel'
+          ? 'bg-yellow-900 text-yellow-100'
+          : 'bg-slate-800 text-slate-200'"
       >
-        {{ props.priority }}
+        {{ priority }}
       </span>
+    </header>
+
+    <div>
+      <h3 class="text-sm font-semibold text-slate-50">
+        {{ title }}
+      </h3>
+
+      <p v-if="description" class="mt-1 text-xs text-slate-300">
+        {{ description }}
+      </p>
     </div>
 
-    <p
-        v-if="props.description"
-        class="text-xs text-gray-300 mt-1 leading-relaxed"
-    >
-      {{ props.description }}
-    </p>
+    <footer class="mt-1 flex flex-wrap gap-2 items-center">
+      <span
+          v-if="role"
+          class="text-[11px] px-2 py-0.5 rounded-full border border-emerald-700 bg-emerald-900 text-emerald-100"
+      >
+        {{ role }}
+      </span>
 
-    <slot />
-
-    <CardFooter :role="props.role" :assignee="props.assignee" />
+      <span
+          v-if="assignee"
+          class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border border-slate-700 bg-slate-800 text-slate-100"
+      >
+        <span
+            class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-700 text-[10px]"
+        >
+          {{ assignee.charAt(0) }}
+        </span>
+        {{ assignee }}
+      </span>
+    </footer>
   </article>
 </template>
