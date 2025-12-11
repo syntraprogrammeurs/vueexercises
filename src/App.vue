@@ -3,6 +3,7 @@ import { ref } from "vue"
 import TaskCard from "./components/TaskCard.vue"
 import BoardColumn from "./components/BoardColumn.vue"
 import TaskStatsBar from "./components/TaskStatsBar.vue"
+import ActivityLog from "./components/ActivityLog.vue"
 
 const columns = ref([
   {
@@ -70,19 +71,31 @@ const newTaskColumnId = ref("original")
 
 const nextTaskId = ref(100)
 
+// NIEUW: logboek
+const activityEntries = ref([])
+
+function log(message) {
+  activityEntries.value.push(message)
+}
+
 function handleAddTask() {
   const column = columns.value.find(c => c.id === newTaskColumnId.value)
   if (!column) return
 
+  const title = newTaskTitle.value
+  const description = newTaskDescription.value
+
   column.tasks.push({
     id: nextTaskId.value++,
-    title: newTaskTitle.value,
-    description: newTaskDescription.value,
+    title,
+    description,
     assignee: "Onbekend",
     role: "Onbekend",
     priority: "",
     done: false
   })
+
+  log(`Taak '${title}' toegevoegd aan kolom '${column.title}'.`)
 
   newTaskTitle.value = ""
   newTaskDescription.value = ""
@@ -92,16 +105,23 @@ function handleAddTaskToColumn(payload) {
   const column = columns.value.find(c => c.id === payload.columnId)
   if (!column) return
 
+  const title = payload.title
+
   column.tasks.push({
     id: nextTaskId.value++,
-    title: payload.title,
+    title,
     description: "",
     assignee: "Onbekend",
     role: "Onbekend",
     priority: "",
     done: false
   })
+
+  log(`Taak '${title}' toegevoegd aan kolom '${column.title}' (via kolomformulier).`)
 }
+
+// In latere oefeningen kun je bij verplaatsen / verwijderen ook log(...)
+// toevoegen in de respectieve handlers.
 </script>
 
 <template>
@@ -116,8 +136,11 @@ function handleAddTaskToColumn(payload) {
       </p>
     </header>
 
-    <!-- NIEUW: statistiekbalk -->
+    <!-- Statistiekbalk -->
     <TaskStatsBar :columns="columns" />
+
+    <!-- NIEUW: logboek van acties -->
+    <ActivityLog :entries="activityEntries" />
 
     <!-- Centraal formulier (optie voor studenten) -->
     <section class="mb-6 bg-slate-900 border border-slate-800 rounded-xl p-4">
