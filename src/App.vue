@@ -62,6 +62,22 @@ const columns = ref([
         done: false
       }
     ]
+  },
+  {
+    id: "done",
+    title: "Done",
+    color: "gray",
+    tasks: [
+      {
+        id: 8,
+        title: "Vite project opgezet",
+        description: "Basisconfiguratie met Vue en Tailwind.",
+        assignee: "Team Dev",
+        role: "Developer",
+        priority: "laag",
+        done: true
+      }
+    ]
   }
 ])
 
@@ -71,12 +87,15 @@ const newTaskColumnId = ref("original")
 
 const nextTaskId = ref(100)
 
-// NIEUW: logboek
+// logboek
 const activityEntries = ref([])
 
 function log(message) {
   activityEntries.value.push(message)
 }
+
+// checkbox voor kolom "Done"
+const hideDoneColumn = ref(false)
 
 function handleAddTask() {
   const column = columns.value.find(c => c.id === newTaskColumnId.value)
@@ -120,8 +139,30 @@ function handleAddTaskToColumn(payload) {
   log(`Taak '${title}' toegevoegd aan kolom '${column.title}' (via kolomformulier).`)
 }
 
-// In latere oefeningen kun je bij verplaatsen / verwijderen ook log(...)
-// toevoegen in de respectieve handlers.
+function clearDone() {
+  const doneColumn = columns.value.find(c => c.id === "done")
+  if (!doneColumn) return
+
+  const count = doneColumn.tasks.length
+
+  doneColumn.tasks = []
+
+  log(`Alle ${count} taken in 'Done' verwijderd.`)
+}
+
+// helper om enkel zichtbare kolommen te tonen
+function getVisibleColumns() {
+  const result = []
+
+  for (const column of columns.value) {
+    if (hideDoneColumn.value && column.id === "done") {
+      continue
+    }
+    result.push(column)
+  }
+
+  return result
+}
 </script>
 
 <template>
@@ -139,10 +180,32 @@ function handleAddTaskToColumn(payload) {
     <!-- Statistiekbalk -->
     <TaskStatsBar :columns="columns" />
 
-    <!-- NIEUW: logboek van acties -->
+    <!-- Logboek van acties -->
     <ActivityLog :entries="activityEntries" />
 
-    <!-- Centraal formulier (optie voor studenten) -->
+    <!-- Blok voor Done-filter en clear-knop -->
+    <section
+        class="mb-6 bg-slate-900 border border-slate-800 rounded-xl p-4 text-xs flex flex-col gap-3"
+    >
+      <label class="inline-flex items-center gap-2 text-slate-200">
+        <input
+            v-model="hideDoneColumn"
+            type="checkbox"
+            class="rounded border-slate-600 bg-slate-800"
+        />
+        Verberg kolom "Done"
+      </label>
+
+      <button
+          type="button"
+          class="inline-flex items-center rounded-md bg-red-700 px-3 py-1.5 text-[11px] font-semibold hover:bg-red-600"
+          @click="clearDone"
+      >
+        Wis alle taken in Done
+      </button>
+    </section>
+
+    <!-- Centraal formulier -->
     <section class="mb-6 bg-slate-900 border border-slate-800 rounded-xl p-4">
       <h2 class="text-sm font-semibold mb-3">
         Nieuwe taak toevoegen
@@ -199,9 +262,10 @@ function handleAddTaskToColumn(payload) {
       </form>
     </section>
 
-    <section class="grid gap-6 md:grid-cols-3">
+    <!-- Kolommen -->
+    <section class="grid gap-6 md:grid-cols-4">
       <BoardColumn
-          v-for="column in columns"
+          v-for="column in getVisibleColumns()"
           :key="column.id"
           :id="column.id"
           :title="column.title"
