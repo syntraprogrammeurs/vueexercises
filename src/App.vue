@@ -188,7 +188,7 @@ function handleToggleImportant(payload) {
   )
 }
 
-// NIEUW: taak dupliceren in dezelfde kolom
+// taak dupliceren in dezelfde kolom
 function handleDuplicateTask(payload) {
   const column = columns.value.find(c => c.id === payload.fromColumnId)
   if (!column) return
@@ -209,10 +209,43 @@ function handleDuplicateTask(payload) {
     important: original.important
   }
 
-  // kopie direct onder de originele taak plaatsen
   column.tasks.splice(index + 1, 0, copy)
 
   log(`Taak '${original.title}' gedupliceerd in kolom '${column.title}'.`)
+}
+
+// NIEUW: taak omhoog verplaatsen binnen dezelfde kolom
+function handleMoveTaskUp(payload) {
+  const column = columns.value.find(c => c.id === payload.fromColumnId)
+  if (!column) return
+
+  const index = column.tasks.findIndex(t => t.id === payload.taskId)
+  if (index <= 0) return
+
+  const task = column.tasks[index]
+  const previous = column.tasks[index - 1]
+
+  column.tasks[index - 1] = task
+  column.tasks[index] = previous
+
+  log(`Taak '${task.title}' omhoog verplaatst in kolom '${column.title}'.`)
+}
+
+// NIEUW: taak omlaag verplaatsen binnen dezelfde kolom
+function handleMoveTaskDown(payload) {
+  const column = columns.value.find(c => c.id === payload.fromColumnId)
+  if (!column) return
+
+  const index = column.tasks.findIndex(t => t.id === payload.taskId)
+  if (index === -1 || index >= column.tasks.length - 1) return
+
+  const task = column.tasks[index]
+  const next = column.tasks[index + 1]
+
+  column.tasks[index + 1] = task
+  column.tasks[index] = next
+
+  log(`Taak '${task.title}' omlaag verplaatst in kolom '${column.title}'.`)
 }
 </script>
 
@@ -338,6 +371,8 @@ function handleDuplicateTask(payload) {
             :important="task.important"
             @toggle-important="handleToggleImportant"
             @duplicate-task="handleDuplicateTask"
+            @move-up="handleMoveTaskUp"
+            @move-down="handleMoveTaskDown"
         />
       </BoardColumn>
     </section>

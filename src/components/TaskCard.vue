@@ -38,7 +38,12 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["toggle-important", "duplicate-task"])
+const emit = defineEmits([
+  "toggle-important",
+  "duplicate-task",
+  "move-up",
+  "move-down"
+])
 
 function handleToggleImportant() {
   emit("toggle-important", {
@@ -49,6 +54,20 @@ function handleToggleImportant() {
 
 function handleDuplicateTask() {
   emit("duplicate-task", {
+    taskId: props.id,
+    fromColumnId: props.columnId
+  })
+}
+
+function handleMoveUp() {
+  emit("move-up", {
+    taskId: props.id,
+    fromColumnId: props.columnId
+  })
+}
+
+function handleMoveDown() {
+  emit("move-down", {
     taskId: props.id,
     fromColumnId: props.columnId
   })
@@ -113,8 +132,25 @@ function handleDuplicateTask() {
       </span>
     </footer>
 
-    <!-- NIEUW: knoppenbalk onderaan -->
-    <div class="mt-2 flex justify-end">
+    <!-- Knoppenbalk: volgorde + dupliceren -->
+    <div class="mt-2 flex justify-between items-center">
+      <div class="flex gap-1">
+        <button
+            type="button"
+            class="text-[11px] px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-100"
+            @click="handleMoveUp"
+        >
+          ↑
+        </button>
+        <button
+            type="button"
+            class="text-[11px] px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-100"
+            @click="handleMoveDown"
+        >
+          ↓
+        </button>
+      </div>
+
       <button
           type="button"
           class="text-[11px] px-3 py-1 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-100"
