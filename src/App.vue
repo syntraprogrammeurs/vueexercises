@@ -2,6 +2,7 @@
 import { ref } from "vue"
 import TaskCard from "./components/TaskCard.vue"
 import BoardColumn from "./components/BoardColumn.vue"
+import TaskStatsBar from "./components/TaskStatsBar.vue"
 
 const columns = ref([
   {
@@ -114,6 +115,9 @@ function handleAddTaskToColumn(payload) {
         dynamisch.
       </p>
     </header>
+
+    <!-- NIEUW: statistiekbalk -->
+    <TaskStatsBar :columns="columns" />
 
     <!-- Centraal formulier (optie voor studenten) -->
     <section class="mb-6 bg-slate-900 border border-slate-800 rounded-xl p-4">
