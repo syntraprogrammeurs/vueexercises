@@ -42,7 +42,8 @@ const emit = defineEmits([
   "toggle-important",
   "duplicate-task",
   "move-up",
-  "move-down"
+  "move-down",
+  "delete-task"
 ])
 
 function handleToggleImportant() {
@@ -68,6 +69,13 @@ function handleMoveUp() {
 
 function handleMoveDown() {
   emit("move-down", {
+    taskId: props.id,
+    fromColumnId: props.columnId
+  })
+}
+
+function handleDeleteTask() {
+  emit("delete-task", {
     taskId: props.id,
     fromColumnId: props.columnId
   })
@@ -132,7 +140,7 @@ function handleMoveDown() {
       </span>
     </footer>
 
-    <!-- Knoppenbalk: volgorde + dupliceren -->
+    <!-- Knoppenbalk: pijltjes + dupliceren + verwijderen -->
     <div class="mt-2 flex justify-between items-center">
       <div class="flex gap-1">
         <button
@@ -151,13 +159,23 @@ function handleMoveDown() {
         </button>
       </div>
 
-      <button
-          type="button"
-          class="text-[11px] px-3 py-1 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-100"
-          @click="handleDuplicateTask"
-      >
-        Dupliceren
-      </button>
+      <div class="flex gap-2">
+        <button
+            type="button"
+            class="text-[11px] px-3 py-1 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-100"
+            @click="handleDuplicateTask"
+        >
+          Dupliceren
+        </button>
+
+        <button
+            type="button"
+            class="text-[11px] px-3 py-1 rounded-md bg-red-700 hover:bg-red-600 text-slate-50"
+            @click="handleDeleteTask"
+        >
+          Verwijderen
+        </button>
+      </div>
     </div>
   </article>
 </template>

@@ -4,6 +4,7 @@ import TaskCard from "./components/TaskCard.vue"
 import BoardColumn from "./components/BoardColumn.vue"
 import TaskStatsBar from "./components/TaskStatsBar.vue"
 import ActivityLog from "./components/ActivityLog.vue"
+import TaskArchive from "./components/TaskArchive.vue"
 
 const columns = ref([
   {
@@ -99,6 +100,9 @@ function log(message) {
   activityEntries.value.push(message)
 }
 
+// archief
+const archivedTasks = ref([])
+
 // checkbox voor kolom "Done"
 const hideDoneColumn = ref(false)
 
@@ -152,9 +156,18 @@ function clearDone() {
 
   const count = doneColumn.tasks.length
 
+  // optioneel: taken uit Done ook archiveren
+  for (const task of doneColumn.tasks) {
+    archivedTasks.value.push({
+      id: task.id,
+      title: task.title,
+      fromColumnTitle: doneColumn.title
+    })
+  }
+
   doneColumn.tasks = []
 
-  log(`Alle ${count} taken in 'Done' verwijderd.`)
+  log(`Alle ${count} taken in 'Done' verwijderd en toegevoegd aan het archief.`)
 }
 
 // HELPER: enkel zichtbare kolommen tonen
@@ -214,7 +227,7 @@ function handleDuplicateTask(payload) {
   log(`Taak '${original.title}' gedupliceerd in kolom '${column.title}'.`)
 }
 
-// NIEUW: taak omhoog verplaatsen binnen dezelfde kolom
+// taak omhoog verplaatsen binnen dezelfde kolom
 function handleMoveTaskUp(payload) {
   const column = columns.value.find(c => c.id === payload.fromColumnId)
   if (!column) return
@@ -231,7 +244,7 @@ function handleMoveTaskUp(payload) {
   log(`Taak '${task.title}' omhoog verplaatst in kolom '${column.title}'.`)
 }
 
-// NIEUW: taak omlaag verplaatsen binnen dezelfde kolom
+// taak omlaag verplaatsen binnen dezelfde kolom
 function handleMoveTaskDown(payload) {
   const column = columns.value.find(c => c.id === payload.fromColumnId)
   if (!column) return
@@ -246,6 +259,25 @@ function handleMoveTaskDown(payload) {
   column.tasks[index] = next
 
   log(`Taak '${task.title}' omlaag verplaatst in kolom '${column.title}'.`)
+}
+
+// taak verwijderen + archiveren
+function handleDeleteTask(payload) {
+  const column = columns.value.find(c => c.id === payload.fromColumnId)
+  if (!column) return
+
+  const index = column.tasks.findIndex(t => t.id === payload.taskId)
+  if (index === -1) return
+
+  const removed = column.tasks.splice(index, 1)[0]
+
+  archivedTasks.value.push({
+    id: removed.id,
+    title: removed.title,
+    fromColumnTitle: column.title
+  })
+
+  log(`Taak '${removed.title}' verwijderd uit kolom '${column.title}' en toegevoegd aan het archief.`)
 }
 </script>
 
@@ -266,6 +298,9 @@ function handleMoveTaskDown(payload) {
 
     <!-- Logboek van acties -->
     <ActivityLog :entries="activityEntries" />
+
+    <!-- Archief van verwijderde taken -->
+    <TaskArchive :tasks="archivedTasks" />
 
     <!-- Blok voor Done-filter en clear-knop -->
     <section
@@ -373,6 +408,7 @@ function handleMoveTaskDown(payload) {
             @duplicate-task="handleDuplicateTask"
             @move-up="handleMoveTaskUp"
             @move-down="handleMoveTaskDown"
+            @delete-task="handleDeleteTask"
         />
       </BoardColumn>
     </section>
